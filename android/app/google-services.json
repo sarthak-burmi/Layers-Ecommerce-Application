@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "676074844128",
+    "project_id": "layers-skins",
+    "storage_bucket": "layers-skins.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676074844128:android:d58827cc27944fd28b4585",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676074844128-bbc6ctut3qk8hlshjqkak9anvkp2bm9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwZQ4On5T-sHaJtoxhk3zpWIOxJXeKlEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676074844128-bbc6ctut3qk8hlshjqkak9anvkp2bm9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
