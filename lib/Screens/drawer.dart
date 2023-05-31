@@ -1,23 +1,16 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/Screens/Smartphone%20Pages/Smartphone.dart';
 import 'package:flutter_application_2/Screens/cart.dart';
-import 'package:flutter_application_2/Screens/cart_provider.dart';
-import 'package:flutter_application_2/Screens/custom%20skin/brand.dart';
+
 import 'package:flutter_application_2/Screens/custom_skin.dart';
 
 import 'package:flutter_application_2/Screens/home_page.dart';
 import 'package:flutter_application_2/Screens/profile_page.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+
 import 'package:flutter_application_2/Screens/create_account.dart';
 import 'package:flutter_application_2/Screens/Laptop skins/laptop_category.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import '../auth.dart';
 
 //import 'openslide.dart';
 
@@ -29,15 +22,15 @@ class mydrawer extends StatefulWidget {
 }
 
 class _mydrawerState extends State<mydrawer> {
-  bool _isHovering = false;
+  //bool _isHovering = false;
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
     return Drawer(
       child: ListView(
-        children: [
+        children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.black,
@@ -72,12 +65,12 @@ class _mydrawerState extends State<mydrawer> {
               child: MouseRegion(
                 onEnter: (event) {
                   setState(() {
-                    _isHovering = true;
+                    //_isHovering = true;
                   });
                 },
                 onExit: (event) {
                   setState(() {
-                    _isHovering = false;
+                    //_isHovering = false;
                   });
                 },
                 child: ListTile(
@@ -86,7 +79,6 @@ class _mydrawerState extends State<mydrawer> {
                     color: Colors.orange,
                   ),
                   title: Text("Home", style: GoogleFonts.alef()),
-                  tileColor: _isHovering ? Colors.orange : Colors.white,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => HomePage(),
@@ -97,30 +89,30 @@ class _mydrawerState extends State<mydrawer> {
             ),
           ),
           SizedBox(height: 5),
-          if (user == null) SizedBox(height: 5),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.black),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: ListTile(
-                leading: Icon(
-                  Icons.person_add,
-                  color: Colors.orange,
+          if (user == null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.black),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                title: Text("Create Account"),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountPage(),
-                    ),
-                  );
-                },
+                child: ListTile(
+                  leading: Icon(
+                    Icons.person_add,
+                    color: Colors.orange,
+                  ),
+                  title: Text("Create Account"),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CreateAccountPage(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
           SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),

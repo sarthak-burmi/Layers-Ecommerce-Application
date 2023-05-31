@@ -1,39 +1,19 @@
-import 'dart:collection';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application_2/Screens/buynowpage.dart';
 import 'package:flutter_application_2/Screens/drawer.dart';
 import 'package:flutter_application_2/Screens/home_page.dart';
-import 'package:flutter_application_2/Screens/home_page.dart';
-import 'package:flutter_application_2/Screens/login_page.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_application_2/Screens/openslide.dart';
-import 'package:flutter_application_2/Screens/create_account.dart';
-import 'package:flutter_application_2/Screens/Smartphone%20Pages/iPhone_Skins/iPhone_%2014_pro_max_skin.dart'
-    as Skin;
-import 'package:flutter_application_2/Screens/Smartphone%20Pages/iPhone_Skins/iPhone_13_pro_max_skin.dart';
-import 'package:flutter_application_2/Screens/Smartphone Pages/iPhone_Skins/iPhone_13_pro_skin.dart';
-import 'package:flutter_application_2/Screens/Smartphone Pages/iPhone_Skins/iPhone_14_pro_skin.dart';
-import 'package:flutter_application_2/Screens/Smartphone Pages/iPhone_Skins/iPhone_14_plus_skin.dart';
-import 'package:flutter_application_2/Screens/Smartphone Pages/iPhone_Skins/iPhone_13_skin.dart';
 
-import 'package:flutter_application_2/Screens/Smartphone%20Pages/iPhone_Skins/iPhone_14_Skins.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:flutter_application_2/Screens/create_account.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_application_2/Screens/Laptop skins/laptop_category.dart';
+
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../models/cart_model.dart';
 import 'cart_provider.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 // class smartphoneskin {
 //   final String name;
@@ -67,7 +47,7 @@ class _cartpageState extends State<cartpage> {
 
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return SingleChildScrollView(
+      return SafeArea(
         child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
@@ -128,7 +108,10 @@ class _cartpageState extends State<cartpage> {
                             },
                             child: Text(
                               'Log In',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -194,16 +177,9 @@ class _cartpageState extends State<cartpage> {
         ),
       );
     }
-    //CartProvider cartProvider = Provider.of<CartProvider>(context);
-
-    String getFormattedPrice() {
-      var rupeeFormat = NumberFormat.currency(symbol: '₹');
-      return rupeeFormat.format(cartProvider.totalcartamt);
-    }
 
     final bool canAddToCart = cartProvider.totalcartamt > 0;
-    int cartlength = 0;
-
+    final totalamount = cartProvider.totalcartamt;
     return Scaffold(
       drawer: mydrawer(),
       appBar: AppBar(
@@ -337,19 +313,36 @@ class _cartpageState extends State<cartpage> {
                     child: ListView.builder(
                       itemCount: cartItems.length,
                       itemBuilder: (context, index) {
+                        final cartItem = cartItems[index];
                         return Container(
                           child: ListTile(
                             title: Text(cartItems[index].name),
                             subtitle: Text(cartItems[index].amount.toString()),
                             leading: Image.asset(cartItems[index].image),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {
-                                cartProvider.removeFromCart(cartItems[index]);
-                              },
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.remove),
+                                  onPressed: () {
+                                    cartProvider.decreaseQuantity(cartItem);
+                                  },
+                                ),
+                                Text(cartItem.quantity.toString()),
+                                IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    cartProvider.increaseQuantity(cartItem);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    cartProvider.removeFromCart(cartItem);
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         );
@@ -384,11 +377,6 @@ class _cartpageState extends State<cartpage> {
                                     ),
                                   ),
                                 );
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //       builder: (context) => buynowpage(
-                                //           totalAmt: cartProvider.totalcartamt)),
-                                // );
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
@@ -452,6 +440,23 @@ class _cartpageState extends State<cartpage> {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Total Cart Amount - $totalamount",
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
+          )
         ],
       ),
     );

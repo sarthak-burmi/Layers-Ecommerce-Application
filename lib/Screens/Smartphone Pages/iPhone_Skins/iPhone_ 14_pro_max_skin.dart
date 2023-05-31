@@ -7,16 +7,9 @@ import 'package:flutter_application_2/Screens/cart.dart';
 import 'package:flutter_application_2/models/cart_model.dart';
 import 'package:flutter_application_2/Screens/cart_provider.dart';
 import 'package:flutter_application_2/Screens/drawer.dart';
-import 'package:flutter_application_2/Screens/home_page.dart';
-import 'package:flutter_application_2/Screens/home_page.dart';
-import 'package:flutter_application_2/Screens/login_page.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_application_2/Screens/create_account.dart';
-import 'package:flutter_application_2/Screens/Smartphone%20Pages/iPhone_Skins/iPhone_%2014_pro_max_skin.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_application_2/Screens/Laptop skins/laptop_category.dart';
-import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 import '../../../images/images_string.dart';
 import '../../custom_skin.dart';
@@ -52,6 +45,7 @@ class _iphone14promaxskinpageState extends State<iphone14promaxskinpage>
   bool isSelected = false;
   late forteenpromaxskins selectedSkin;
   late forteenpromaxskins withoutskin;
+  final cartProvider = Provider.of<CartProvider>;
 
   final List<forteenpromaxskins> skins = [
     forteenpromaxskins(
@@ -454,10 +448,12 @@ class _iphone14promaxskinpageState extends State<iphone14promaxskinpage>
                         ),
                       ),
                     );
+
                     CartItem item = CartItem(
-                        name: selectedSkin.name,
-                        image: selectedSkin.image,
-                        amount: selectedSkin.amount);
+                      name: selectedSkin.name,
+                      image: selectedSkin.image,
+                      amount: selectedSkin.amount,
+                    );
 
                     Provider.of<CartProvider>(context, listen: false)
                         .addToCart(item);

@@ -5,7 +5,7 @@ import 'package:flutter_application_2/Screens/create_account.dart';
 import 'package:flutter_application_2/Screens/drawer.dart';
 import 'package:flutter_application_2/Screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
 
 class profilepage extends StatefulWidget {
   const profilepage({Key? key}) : super(key: key);
@@ -15,40 +15,28 @@ class profilepage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<profilepage> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
-  bool _isloggedIn = false;
-  GoogleSignInAccount? _user;
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      setState(() {
-        _isloggedIn = account != null;
-        _user = account;
-      });
-    });
-  }
-  // User? user = FirebaseAuth.instance.currentUser;
-  // if(user==null){
-
+  // final GoogleSignIn _googleSignIn = GoogleSignIn(
+  //   scopes: [
+  //     'email',
+  //     'https://www.googleapis.com/auth/contacts.readonly',
+  //   ],
+  // );
+  // bool _isloggedIn = false;
+  // GoogleSignInAccount? _user;
+  // void initState() {
+  //   super.initState();
+  //   _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+  //     setState(() {
+  //       _isloggedIn = account != null;
+  //       _user = account;
+  //     });
+  //   });
   // }
 
-  // Stream<DocumentSnapshot> getUserDataStream() {
-  //   final CollectionReference users =
-  //       FirebaseFirestore.instance.collection('usersdata');
-
-  //   return users.doc(user!.uid).snapshots();
-  // }
-
-  @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return SingleChildScrollView(
+      return SafeArea(
         child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
@@ -109,7 +97,10 @@ class _ProfilePageState extends State<profilepage> {
                             },
                             child: Text(
                               'Log In',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -148,7 +139,7 @@ class _ProfilePageState extends State<profilepage> {
                   ),
                 ],
               ),
-              SizedBox(height: 60),
+              SizedBox(height: 90),
               Row(
                 children: [
                   Expanded(
@@ -442,16 +433,6 @@ class _ProfilePageState extends State<profilepage> {
                                 ),
                               ),
                             ),
-                            // Column(
-                            //   children: [
-                            //     data['address'] != null
-                            //         ? Text('Address: ${data['address']}')
-                            //         : Text('Address Not Found'),
-                            //     data['address'] == null? ElevatedButton(onPressed:() {
-                            //       Navigator.push(context, MaterialPageRoute(builder: ((context) => ) ))
-                            //     }, , child: child)
-                            //   ],
-                            // ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 30, right: 30, bottom: 10, top: 190),

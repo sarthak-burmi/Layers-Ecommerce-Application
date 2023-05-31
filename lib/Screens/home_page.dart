@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: IconButton(
               icon: Icon(
                 Icons.account_circle,

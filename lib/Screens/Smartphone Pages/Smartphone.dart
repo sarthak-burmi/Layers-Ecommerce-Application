@@ -94,11 +94,11 @@ class smartphonecategory extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: 'Smartphone Brand',
-                      style:
-                          Theme.of(context).textTheme.displayMedium!.copyWith(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      style: GoogleFonts.montserrat(
+                        fontSize: 25,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -107,7 +107,7 @@ class smartphonecategory extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(0),
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(50, 20, 50, 10),

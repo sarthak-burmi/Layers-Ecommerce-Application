@@ -1,24 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/Screens/Smartphone%20Pages/iPhone_Skins/iPhone_%2014_pro_max_skin.dart';
 import 'package:flutter_application_2/Screens/cart_provider.dart';
 
 import 'package:flutter_application_2/Screens/home_page.dart';
 import 'package:flutter_application_2/Screens/login_page.dart';
-import 'package:flutter_application_2/Screens/signIn.dart';
-import 'package:flutter_application_2/Screens/create_account.dart';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
-import 'package:flutter_application_2/auth_widget.dart';
-import 'package:flutter_application_2/theme/theme.dart';
+
 import 'package:flutter_application_2/Screens/openslide.dart';
 import 'package:flutter_application_2/Screens/cart.dart';
-import 'Screens/Smartphone Pages/Samsung_Skins/Samsung_phones.dart';
-import 'auth.dart';
+
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_2/Screens/cart_provider.dart';
 
+var kColorScheme = ColorScheme.fromSeed(
+  seedColor: Colors.black,
+);
+var kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: Colors.white,
+);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -49,18 +50,58 @@ class _SpotifyState extends State<Spotify> {
 
   @override
   Widget build(BuildContext context) {
-    debugShowCheckedModeBanner:
-    false;
-    final User user;
+    //final User user;
     return ChangeNotifierProvider(
       create: (context) => CartProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: TAppTheme.lightTheme,
+        theme: ThemeData().copyWith(
+          useMaterial3: true,
+          colorScheme: ColorScheme.light(),
+          appBarTheme: const AppBarTheme().copyWith(
+            backgroundColor: kColorScheme.onPrimaryContainer,
+            foregroundColor: kColorScheme.secondaryContainer,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+            ),
+          ),
+        ),
+        //theme: TAppTheme.lightTheme,
         // theme: ThemeData(
         //   useMaterial3: true,
         // ),
-        darkTheme: TAppTheme.darkTheme,
+        //darkTheme: TAppTheme.darkTheme,
+        darkTheme: ThemeData.dark().copyWith(
+          useMaterial3: true,
+          colorScheme: kDarkColorScheme,
+          cardTheme: const CardTheme().copyWith(
+            color: kDarkColorScheme.secondaryContainer,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          ),
+          drawerTheme: DrawerThemeData().copyWith(
+            backgroundColor: kDarkColorScheme.background,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kDarkColorScheme.primaryContainer,
+              foregroundColor: kDarkColorScheme.onPrimaryContainer,
+            ),
+          ),
+          textTheme: ThemeData().textTheme.copyWith(
+                titleLarge: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+                titleSmall: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: kDarkColorScheme.onSecondaryContainer,
+                ),
+              ),
+        ),
         themeMode: ThemeMode.system,
 
         //fontFamily: GoogleFonts.lato().fontFamily,
@@ -77,7 +118,6 @@ class _SpotifyState extends State<Spotify> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return IntroPage();
             } else if (snapshot.hasData && snapshot.data != null) {
-              final User user = snapshot.data!;
               return HomePage();
             } else {
               return PageView(

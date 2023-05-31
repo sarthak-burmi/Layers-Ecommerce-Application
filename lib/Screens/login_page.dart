@@ -1,17 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/Screens/drawer.dart';
+
 import 'package:flutter_application_2/Screens/home_page.dart';
 import 'package:flutter_application_2/Screens/create_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
-import 'package:get/get.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
-
-import '../auth.dart';
 
 //firebase.initializeApp()
 
@@ -25,6 +20,7 @@ class _loginnPageState extends State<loginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool _isLoading = false;
@@ -153,145 +149,131 @@ class _loginnPageState extends State<loginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              height: 350,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 40, left: 40, right: 40, top: 40),
-                child: Image.asset(
-                  "assets/images/login page image.png",
-                  fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              Container(
+                height: 350,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 20, left: 40, right: 40, top: 40),
+                  child: Image.asset(
+                    "assets/images/login page image.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40),
-              child: RichText(
-                text: TextSpan(
-                  text: 'Welcome Back !!!',
-                  style: GoogleFonts.lato(
-                      color: Color.fromARGB(255, 79, 59, 171),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 35),
-                  children: [
-                    TextSpan(
-                      text: '\nEnter Your SignIn Details',
-                      style: GoogleFonts.lato(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(right: 40),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Welcome Back !!!',
+                    style: GoogleFonts.lato(
+                        color: Color.fromARGB(255, 79, 59, 171),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35),
+                    children: [
+                      TextSpan(
+                        text: '\nEnter Your SignIn Details',
+                        style: GoogleFonts.lato(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 2),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 32.0),
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+              SizedBox(height: 0),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 32.0),
+                      child: SingleChildScrollView(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'Email',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                 ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email.';
-                                }
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email.';
+                                  }
 
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 16.0),
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
+                                  return null;
+                                },
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your password.';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 16.0),
-                            Container(
-                              height: 45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 79, 59, 171),
+                              SizedBox(height: 16.0),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: !_isPasswordVisible,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPasswordVisible =
+                                            !_isPasswordVisible;
+                                      });
+                                    },
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  // final auth = Provider.of<AuthProvider>(
-                                  //     context,
-                                  //     listen: false);
-                                  // auth.login();
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                    CircularProgressIndicator();
-                                    try {
-                                      UserCredential userCredential =
-                                          await FirebaseAuth.instance
-                                              .signInWithEmailAndPassword(
-                                                  email: _emailController.text,
-                                                  password:
-                                                      _passwordController.text);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          backgroundColor: Colors.green,
-                                          behavior: SnackBarBehavior.floating,
-                                          margin: EdgeInsets.only(
-                                              bottom: 720, left: 10, right: 10),
-                                          content: Row(
-                                            children: [
-                                              Text("Logged Into Your Account"),
-                                              SizedBox(width: 5),
-                                              CircleAvatar(
-                                                  backgroundColor: Colors.white,
-                                                  radius: 12,
-                                                  child: Icon(
-                                                    Icons.check,
-                                                    color: Colors.green,
-                                                  )),
-                                            ],
-                                          ),
-                                          duration: Duration(seconds: 3),
-                                        ),
-                                      );
-                                      Navigator.pushReplacementNamed(
-                                          context, '/home');
-                                    } on FirebaseAuthException catch (e) {
-                                      if (e.code == 'invalid-email') {
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 16.0),
+                              Container(
+                                height: 45,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 79, 59, 171),
+                                  ),
+                                  onPressed: () async {
+                                    // final auth = Provider.of<AuthProvider>(
+                                    //     context,
+                                    //     listen: false);
+                                    // auth.login();
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      CircularProgressIndicator();
+                                      try {
+                                        UserCredential userCredential =
+                                            await FirebaseAuth.instance
+                                                .signInWithEmailAndPassword(
+                                                    email:
+                                                        _emailController.text,
+                                                    password:
+                                                        _passwordController
+                                                            .text);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -299,7 +281,7 @@ class _loginnPageState extends State<loginPage> {
                                               borderRadius:
                                                   BorderRadius.circular(30),
                                             ),
-                                            backgroundColor: Colors.red,
+                                            backgroundColor: Colors.green,
                                             behavior: SnackBarBehavior.floating,
                                             margin: EdgeInsets.only(
                                                 bottom: 720,
@@ -308,23 +290,129 @@ class _loginnPageState extends State<loginPage> {
                                             content: Row(
                                               children: [
                                                 Text(
-                                                    "Please Enter Vaild Email Adress"),
+                                                    "Logged Into Your Account"),
                                                 SizedBox(width: 5),
                                                 CircleAvatar(
                                                     backgroundColor:
                                                         Colors.white,
                                                     radius: 12,
                                                     child: Icon(
-                                                      Icons.block_sharp,
-                                                      color: Colors.red,
+                                                      Icons.check,
+                                                      color: Colors.green,
                                                     )),
                                               ],
                                             ),
                                             duration: Duration(seconds: 3),
                                           ),
                                         );
-                                      } else if (e.code == 'user-not-found' ||
-                                          e.code == 'wrong-password') {
+                                        Navigator.pushReplacementNamed(
+                                            context, '/home');
+                                      } on FirebaseAuthException catch (e) {
+                                        if (e.code == 'invalid-email') {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              margin: EdgeInsets.only(
+                                                  bottom: 720,
+                                                  left: 10,
+                                                  right: 10),
+                                              content: Row(
+                                                children: [
+                                                  Text(
+                                                      "Please Enter Vaild Email Adress"),
+                                                  SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                      radius: 12,
+                                                      child: Icon(
+                                                        Icons.block_sharp,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        } else if (e.code == 'user-not-found' ||
+                                            e.code == 'wrong-password') {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              margin: EdgeInsets.only(
+                                                  bottom: 720,
+                                                  left: 10,
+                                                  right: 10),
+                                              content: Row(
+                                                children: [
+                                                  Text(
+                                                      "Inavaild Email or Password"),
+                                                  SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                      radius: 12,
+                                                      child: Icon(
+                                                        Icons.block_sharp,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              margin: EdgeInsets.only(
+                                                  bottom: 720,
+                                                  left: 10,
+                                                  right: 10),
+                                              content: Row(
+                                                children: [
+                                                  Text(
+                                                      "An unknown error occured"),
+                                                  SizedBox(width: 5),
+                                                  CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                      radius: 12,
+                                                      child: Icon(
+                                                        Icons.block_sharp,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    } else {
+                                      if (_emailController.text.isEmpty ||
+                                          _passwordController.text.isEmpty) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -334,6 +422,7 @@ class _loginnPageState extends State<loginPage> {
                                             ),
                                             backgroundColor: Colors.red,
                                             behavior: SnackBarBehavior.floating,
+                                            //width: 300,
                                             margin: EdgeInsets.only(
                                                 bottom: 720,
                                                 left: 10,
@@ -341,7 +430,7 @@ class _loginnPageState extends State<loginPage> {
                                             content: Row(
                                               children: [
                                                 Text(
-                                                    "Inavaild Email or Password"),
+                                                    "Please Enter Your Email And Password"),
                                                 SizedBox(width: 5),
                                                 CircleAvatar(
                                                     backgroundColor:
@@ -373,7 +462,7 @@ class _loginnPageState extends State<loginPage> {
                                             content: Row(
                                               children: [
                                                 Text(
-                                                    "An unknown error occured"),
+                                                    "Please Enter vaild Email and Password"),
                                                 SizedBox(width: 5),
                                                 CircleAvatar(
                                                     backgroundColor:
@@ -390,177 +479,118 @@ class _loginnPageState extends State<loginPage> {
                                         );
                                       }
                                     }
-                                  } else {
-                                    if (_emailController.text.isEmpty ||
-                                        _passwordController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          backgroundColor: Colors.red,
-                                          behavior: SnackBarBehavior.floating,
-                                          //width: 300,
-                                          margin: EdgeInsets.only(
-                                              bottom: 720, left: 10, right: 10),
-                                          content: Row(
-                                            children: [
-                                              Text(
-                                                  "Please Enter Your Email And Password"),
-                                              SizedBox(width: 5),
-                                              CircleAvatar(
-                                                  backgroundColor: Colors.white,
-                                                  radius: 12,
-                                                  child: Icon(
-                                                    Icons.block_sharp,
-                                                    color: Colors.red,
-                                                  )),
-                                            ],
-                                          ),
-                                          duration: Duration(seconds: 3),
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          backgroundColor: Colors.red,
-                                          behavior: SnackBarBehavior.floating,
-                                          margin: EdgeInsets.only(
-                                              bottom: 720, left: 10, right: 10),
-                                          content: Row(
-                                            children: [
-                                              Text(
-                                                  "Please Enter vaild Email and Password"),
-                                              SizedBox(width: 5),
-                                              CircleAvatar(
-                                                  backgroundColor: Colors.white,
-                                                  radius: 12,
-                                                  child: Icon(
-                                                    Icons.block_sharp,
-                                                    color: Colors.red,
-                                                  )),
-                                            ],
-                                          ),
-                                          duration: Duration(seconds: 3),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                  //   final form = _formKey.currentState;
-                                  //   if (_formKey.currentState!.validate()) {
-                                  //     if (form!.validate()) {
-                                  //       _signIn();
-                                  //     }
+                                    //   final form = _formKey.currentState;
+                                    //   if (_formKey.currentState!.validate()) {
+                                    //     if (form!.validate()) {
+                                    //       _signIn();
+                                    //     }
 
-                                  //     _signIn();
-                                  //     Navigator.of(context).push(MaterialPageRoute(
-                                  //         builder: (context) => HomePage()));
-                                  //   }
-                                },
-                                child: _isLoading
-                                    ? CircularProgressIndicator()
-                                    : Text(
-                                        'Sign In',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Center(
-                              child: Text(
-                                "Or",
-                                style: GoogleFonts.lato(
-                                    color: Color.fromARGB(255, 79, 59, 171),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 60,
-                              child: Center(
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      backgroundColor: Colors.white),
-                                  onPressed: () {
-                                    _googlesignin(context);
+                                    //     _signIn();
+                                    //     Navigator.of(context).push(MaterialPageRoute(
+                                    //         builder: (context) => HomePage()));
+                                    //   }
                                   },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/google_logo.png',
-                                        height: 24.0,
-                                      ),
-                                      SizedBox(width: 12.0),
-                                      Text(
-                                        'Sign up with Google',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
+                                  child: _isLoading
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          'Sign In',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            OutlinedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => HomePage()));
-                                },
+                              SizedBox(height: 10),
+                              Center(
                                 child: Text(
-                                  "Want to Explore...Go to Home Page",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 79, 59, 171),
-                                  ),
-                                )),
-                            SizedBox(height: 0),
-                            Container(
-                                height: 45,
+                                  "Or",
+                                  style: GoogleFonts.lato(
+                                      color: Color.fromARGB(255, 79, 59, 171),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 60,
                                 child: Center(
-                                  child: TextButton(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        backgroundColor: Colors.white),
                                     onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CreateAccountPage(),
-                                        ),
-                                      );
+                                      _googlesignin(context);
                                     },
-                                    child: Text(
-                                      "New User? Click Here to Create Account",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 79, 59, 171),
-                                      ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/google_logo.png',
+                                          height: 24.0,
+                                        ),
+                                        SizedBox(width: 12.0),
+                                        Text(
+                                          'Sign up with Google',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ))
-                          ],
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              OutlinedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
+                                  },
+                                  child: Text(
+                                    "Want to Explore...Go to Home Page",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 79, 59, 171),
+                                    ),
+                                  )),
+                              SizedBox(height: 0),
+                              Container(
+                                  height: 45,
+                                  child: Center(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CreateAccountPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "New User? Click Here to Create Account",
+                                        style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 79, 59, 171),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

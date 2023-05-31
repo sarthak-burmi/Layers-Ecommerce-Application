@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/Screens/buynowpage.dart';
+//import 'package:flutter_application_2/Screens/buynowpage.dart';
 import 'package:flutter_application_2/Screens/drawer.dart';
 import 'package:flutter_application_2/Screens/home_page.dart';
 import 'package:flutter_application_2/models/custom_skin_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 
 class CustomSkinPage extends StatefulWidget {
   const CustomSkinPage({super.key});
